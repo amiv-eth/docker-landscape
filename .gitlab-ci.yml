@@ -1,0 +1,69 @@
+stages:
+  - build
+
+build_master_latest:
+  stage: build
+  image: docker:latest
+  services:
+    - docker:dind
+  before_script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+  script:
+    - docker build --pull --file postgres.Dockerfile -t "$CI_REGISTRY_DB_IMAGE" ./
+    - docker build --pull --file proxy.Dockerfile -t "$CI_REGISTRY_PROXY_IMAGE" ./
+    - docker build --pull --file service.Dockerfile -t "$CI_REGISTRY_SERVICE_IMAGE" ./
+    - docker push "$CI_REGISTRY_DB_IMAGE"
+    - docker push "$CI_REGISTRY_PROXY_IMAGE"
+    - docker push "$CI_REGISTRY_SERVICE_IMAGE"
+  only:
+    - master
+
+build_master_tag:
+  stage: build
+  image: docker:latest
+  services:
+    - docker:dind
+  before_script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+  script:
+    - docker build --pull --file postgres.Dockerfile -t "$CI_REGISTRY_DB_IMAGE:$CI_COMMIT_TAG" ./
+    - docker build --pull --file proxy.Dockerfile -t "$CI_REGISTRY_PROXY_IMAGE:$CI_COMMIT_TAG" ./
+    - docker build --pull --file service.Dockerfile -t "$CI_REGISTRY_SERVICE_IMAGE:$CI_COMMIT_TAG" ./
+    - docker push "$CI_REGISTRY_DB_IMAGE:$CI_COMMIT_TAG"
+    - docker push "$CI_REGISTRY_PROXY_IMAGE:$CI_COMMIT_TAG"
+    - docker push "$CI_REGISTRY_SERVICE_IMAGE:$CI_COMMIT_TAG"
+  only:
+    - master
+    - tags
+
+# ---------------------------------------------------------------------------
+# On branches except master: verify that build works, do not push to registry
+build_postgres:
+  stage: build
+  image: docker:latest
+  services:
+    - docker:dind
+  script:
+    - docker build --pull --file postgres.Dockerfile ./
+  except:
+    - master
+
+build_proxy:
+  stage: build
+  image: docker:latest
+  services:
+    - docker:dind
+  script:
+    - docker build --pull --file proxy.Dockerfile ./
+  except:
+    - master
+
+build_service:
+  stage: build
+  image: docker:latest
+  services:
+    - docker:dind
+  script:
+    - docker build --pull --file service.Dockerfile ./
+  except:
+    - master

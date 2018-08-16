@@ -1,0 +1,191 @@
+version: "3"
+
+services:
+
+  postgres:
+    build: 
+      context: ./
+      dockerfile: postgres.Dockerfile
+    environment:
+      - POSTGRES_PASSWORD=securePassword
+    networks: 
+      - backend
+
+  rabbitmq:
+    image: rabbitmq:3.6-alpine
+    ports:
+      - "15672:15672"
+    networks:
+      - backend
+
+  landscape-proxy:
+    build:
+      context: ./
+      dockerfile: proxy.Dockerfile
+    links:
+      - postgres:landscape-postgres
+    ports:
+      - "80:80"
+    volumes:
+      - ./example.conf:/landscape.conf:ro
+    networks:
+      - backend
+      - frontend
+  
+  landscape-app-server:
+    environment:
+      - SERVICE=APPSERVER
+    build:
+      context: ./
+      dockerfile: service.Dockerfile
+    links:
+      - postgres:landscape-postgres
+      - rabbitmq
+    volumes:
+      - data-volume:/var/lib/landscape
+      - ./example.conf:/landscape.conf:ro
+    networks:
+      - backend
+  
+  landscape-async-frontend:
+    environment:
+      - SERVICE=ASYNC_FRONTEND
+    build:
+      context: ./
+      dockerfile: service.Dockerfile
+    links:
+      - postgres:landscape-postgres
+      - rabbitmq
+    volumes:
+      - data-volume:/var/lib/landscape
+      - ./example.conf:/landscape.conf:ro
+    networks:
+      - backend
+  
+  landscape-jobhandler:
+    environment:
+      - SERVICE=JOBHANDLER
+    build:
+      context: ./
+      dockerfile: service.Dockerfile
+    links:
+      - postgres:landscape-postgres
+      - rabbitmq
+    volumes:
+      - data-volume:/var/lib/landscape
+      - ./example.conf:/landscape.conf:ro
+    networks:
+      - backend
+  
+  landscape-message-server:
+    environment:
+      - SERVICE=MSGSERVER
+    build:
+      context: ./
+      dockerfile: service.Dockerfile
+    links:
+      - postgres:landscape-postgres
+      - rabbitmq
+    volumes:
+      - data-volume:/var/lib/landscape
+      - ./example.conf:/landscape.conf:ro
+    networks:
+      - backend
+  
+  landscape-ping-server:
+    environment:
+      - SERVICE=PINGSERVER
+    build:
+      context: ./
+      dockerfile: service.Dockerfile
+    links:
+      - postgres:landscape-postgres
+      - rabbitmq
+    volumes:
+      - data-volume:/var/lib/landscape
+      - ./example.conf:/landscape.conf:ro
+    networks:
+      - backend
+
+  landscape-api-server:
+    environment:
+      - SERVICE=APISERVER
+    build:
+      context: ./
+      dockerfile: service.Dockerfile
+    links:
+      - postgres:landscape-postgres
+      - rabbitmq
+    volumes:
+      - data-volume:/var/lib/landscape
+      - ./example.conf:/landscape.conf:ro
+    networks:
+      - backend
+  
+  landscape-package-upload-server:
+    environment:
+      - SERVICE=PACKAGEUPLOADSERVER
+    build:
+      context: ./
+      dockerfile: service.Dockerfile
+    links:
+      - postgres:landscape-postgres
+      - rabbitmq
+    volumes:
+      - data-volume:/var/lib/landscape
+      - ./example.conf:/landscape.conf:ro
+    networks:
+      - backend
+
+  # landscape-package-search:
+  #   environment:
+  #     - SERVICE=PACKAGESEARCH
+  #   build:
+  #     context: ./
+  #     dockerfile: service.Dockerfile
+  #   links:
+  #     - postgres:landscape-postgres
+  #     - rabbitmq
+  #   volumes:
+  #     - data-volume:/var/lib/landscape
+  #     - ./example.conf:/landscape.conf:ro
+  #   networks:
+  #     - backend
+  
+  # landscape-cron:
+  #   environment:
+  #     - SERVICE=CRON
+  #   build:
+  #     context: ./
+  #     dockerfile: service.Dockerfile
+  #   links:
+  #     - postgres:landscape-postgres
+  #     - rabbitmq
+  #   volumes:
+  #     - data-volume:/var/lib/landscape
+  #     - ./example.conf:/landscape.conf:ro
+  #   networks:
+  #     - backend
+  
+  # landscape-upgrade:
+  #   environment:
+  #     - SERVICE=UPGRADE
+  #   build:
+  #     context: ./
+  #     dockerfile: service.Dockerfile
+  #   links:
+  #     - postgres:landscape-postgres
+  #     - rabbitmq
+  #   volumes:
+  #     - data-volume:/var/lib/landscape
+  #     - ./example.conf:/landscape.conf:ro
+  #   networks:
+  #     - backend
+
+volumes:
+  data-volume:
+
+networks:
+  backend:
+  frontend:
+    driver: bridge
