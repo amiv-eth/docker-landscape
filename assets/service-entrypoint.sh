@@ -91,6 +91,15 @@ function init {
   # Enable specified service for running
   sed -i 's,RUN_'"${SERVICE}"'="no",RUN_'"${SERVICE}"'="yes",g' /etc/default/landscape-server
   printf "Service ${SERVICE} enabled.\n"
+
+  # Copy default files if empty volumes are mounted
+  if [ !"$(ls -A /var/lib/landscape)" ]; then
+    cp -R /data/landscape /var/lib
+  fi
+
+  if [ !"$(ls -A /var/lib/landscape)" ]; then
+    cp -R /data/landscape-server /var/lib
+  fi
 }
 
 # ----------------------------------------------------------

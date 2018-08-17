@@ -10,6 +10,11 @@ RUN apt-get update && \
     apt-get -fy dist-upgrade && \
     apt-get -fy install landscape-server
 
+# Save default files to separate directory
+RUN mkdir /data && \
+    cp -R /var/lib/landscape /data && \
+    cp -R /var/lib/landscape-server /data
+
 COPY assets/landscape.conf /etc/landscape/service.conf
 
 COPY assets/service-entrypoint.sh /sbin/entrypoint.sh

@@ -5,7 +5,7 @@ The provided images allows you to run an instance of Canonical Landscape with do
 ## Usage
 
 Every container needs the same configuration file (see `example.conf`) mounted on `/landscape.conf`.
-They need also a common volume mounted on `/var/lib/landscape`.
+They need also common volumes mounted on `/var/lib/landscape` and `/var/lib/landscape-server`.
 
 You need at least one proxy container and the following service container:
 

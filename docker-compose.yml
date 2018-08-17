@@ -43,99 +43,106 @@ services:
       - rabbitmq
     volumes:
       - data-volume:/var/lib/landscape
+      - data-volume2:/var/lib/landscape-server
       - ./example.conf:/landscape.conf:ro
     networks:
       - backend
   
-  landscape-async-frontend:
-    environment:
-      - SERVICE=ASYNC_FRONTEND
-    build:
-      context: ./
-      dockerfile: service.Dockerfile
-    links:
-      - postgres:landscape-postgres
-      - rabbitmq
-    volumes:
-      - data-volume:/var/lib/landscape
-      - ./example.conf:/landscape.conf:ro
-    networks:
-      - backend
+  # landscape-async-frontend:
+  #   environment:
+  #     - SERVICE=ASYNC_FRONTEND
+  #   build:
+  #     context: ./
+  #     dockerfile: service.Dockerfile
+  #   links:
+  #     - postgres:landscape-postgres
+  #     - rabbitmq
+  #   volumes:
+  #     - data-volume:/var/lib/landscape
+  #     - data-volume2:/var/lib/landscape-server
+  #     - ./example.conf:/landscape.conf:ro
+  #   networks:
+  #     - backend
   
-  landscape-jobhandler:
-    environment:
-      - SERVICE=JOBHANDLER
-    build:
-      context: ./
-      dockerfile: service.Dockerfile
-    links:
-      - postgres:landscape-postgres
-      - rabbitmq
-    volumes:
-      - data-volume:/var/lib/landscape
-      - ./example.conf:/landscape.conf:ro
-    networks:
-      - backend
+  # landscape-jobhandler:
+  #   environment:
+  #     - SERVICE=JOBHANDLER
+  #   build:
+  #     context: ./
+  #     dockerfile: service.Dockerfile
+  #   links:
+  #     - postgres:landscape-postgres
+  #     - rabbitmq
+  #   volumes:
+  #     - data-volume:/var/lib/landscape
+  #     - data-volume2:/var/lib/landscape-server
+  #     - ./example.conf:/landscape.conf:ro
+  #   networks:
+  #     - backend
   
-  landscape-message-server:
-    environment:
-      - SERVICE=MSGSERVER
-    build:
-      context: ./
-      dockerfile: service.Dockerfile
-    links:
-      - postgres:landscape-postgres
-      - rabbitmq
-    volumes:
-      - data-volume:/var/lib/landscape
-      - ./example.conf:/landscape.conf:ro
-    networks:
-      - backend
+  # landscape-message-server:
+  #   environment:
+  #     - SERVICE=MSGSERVER
+  #   build:
+  #     context: ./
+  #     dockerfile: service.Dockerfile
+  #   links:
+  #     - postgres:landscape-postgres
+  #     - rabbitmq
+  #   volumes:
+  #     - data-volume:/var/lib/landscape
+  #     - data-volume2:/var/lib/landscape-server
+  #     - ./example.conf:/landscape.conf:ro
+  #   networks:
+  #     - backend
   
-  landscape-ping-server:
-    environment:
-      - SERVICE=PINGSERVER
-    build:
-      context: ./
-      dockerfile: service.Dockerfile
-    links:
-      - postgres:landscape-postgres
-      - rabbitmq
-    volumes:
-      - data-volume:/var/lib/landscape
-      - ./example.conf:/landscape.conf:ro
-    networks:
-      - backend
+  # landscape-ping-server:
+  #   environment:
+  #     - SERVICE=PINGSERVER
+  #   build:
+  #     context: ./
+  #     dockerfile: service.Dockerfile
+  #   links:
+  #     - postgres:landscape-postgres
+  #     - rabbitmq
+  #   volumes:
+  #     - data-volume:/var/lib/landscape
+  #     - data-volume2:/var/lib/landscape-server
+  #     - ./example.conf:/landscape.conf:ro
+  #   networks:
+  #     - backend
 
-  landscape-api-server:
-    environment:
-      - SERVICE=APISERVER
-    build:
-      context: ./
-      dockerfile: service.Dockerfile
-    links:
-      - postgres:landscape-postgres
-      - rabbitmq
-    volumes:
-      - data-volume:/var/lib/landscape
-      - ./example.conf:/landscape.conf:ro
-    networks:
-      - backend
+  # landscape-api-server:
+  #   environment:
+  #     - SERVICE=APISERVER
+  #   build:
+  #     context: ./
+  #     dockerfile: service.Dockerfile
+  #   links:
+  #     - postgres:landscape-postgres
+  #     - rabbitmq
+  #   volumes:
+  #     - data-volume:/var/lib/landscape
+  #     - data-volume2:/var/lib/landscape-server
+  #     - ./example.conf:/landscape.conf:ro
+  #   networks:
+  #     - backend
   
-  landscape-package-upload-server:
-    environment:
-      - SERVICE=PACKAGEUPLOADSERVER
-    build:
-      context: ./
-      dockerfile: service.Dockerfile
-    links:
-      - postgres:landscape-postgres
-      - rabbitmq
-    volumes:
-      - data-volume:/var/lib/landscape
-      - ./example.conf:/landscape.conf:ro
-    networks:
-      - backend
+  # landscape-package-upload-server:
+  #   environment:
+  #     - SERVICE=PACKAGEUPLOADSERVER
+  #   build:
+  #     context: ./
+  #     dockerfile: service.Dockerfile
+  #   links:
+  #     - postgres:landscape-postgres
+  #     - rabbitmq
+  #   volumes:
+  #     - data-volume:/var/lib/landscape
+  #     - data-volume2:/var/lib/landscape-server
+  #     - ./example.conf:/landscape.conf:ro
+  #   networks:
+  #     - backend
 
   # landscape-package-search:
   #   environment:
@@ -148,6 +155,7 @@ services:
   #     - rabbitmq
   #   volumes:
   #     - data-volume:/var/lib/landscape
+  #     - data-volume2:/var/lib/landscape-server
   #     - ./example.conf:/landscape.conf:ro
   #   networks:
   #     - backend
@@ -163,6 +171,7 @@ services:
   #     - rabbitmq
   #   volumes:
   #     - data-volume:/var/lib/landscape
+  #     - data-volume2:/var/lib/landscape-server
   #     - ./example.conf:/landscape.conf:ro
   #   networks:
   #     - backend
@@ -178,12 +187,14 @@ services:
   #     - rabbitmq
   #   volumes:
   #     - data-volume:/var/lib/landscape
+  #     - data-volume2:/var/lib/landscape-server
   #     - ./example.conf:/landscape.conf:ro
   #   networks:
   #     - backend
 
 volumes:
   data-volume:
+  data-volume2:
 
 networks:
   backend:
