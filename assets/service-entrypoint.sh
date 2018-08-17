@@ -162,6 +162,8 @@ function startService {
     tail -f /var/log/landscape-server/package-upload.log
   elif [ "$SERVICE" == "PACKAGEUPLOADSERVER" ]; then
     tail -f /var/log/landscape-server/package-upload.log
+  elif [ "$SERVICE" == "CRON" ]; then
+    cron -f
   else
     tail -f /etc/landscape/service.conf
   fi

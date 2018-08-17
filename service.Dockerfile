@@ -12,8 +12,8 @@ RUN apt-get update && \
 
 # Save default files to separate directory
 RUN mkdir /data && \
-    cp -R /var/lib/landscape /data && \
-    cp -R /var/lib/landscape-server /data
+    mv /var/lib/landscape /data && \
+    mv /var/lib/landscape-server /data
 
 COPY assets/landscape.conf /etc/landscape/service.conf
 
