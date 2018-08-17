@@ -15,7 +15,4 @@ sed -i 's,{{SERVICE_API}},'"${SERVICE_API}"',g' /etc/apache2/conf.d/landscape.co
 sed -i 's,{{SERVICE_PACKAGE}},'"${SERVICE_PACKAGE}"',g' /etc/apache2/conf.d/landscape.conf
 
 # start Apache
-#exec httpd -DFOREGROUND || :
-exec httpd &
-
-tail -f /etc/apache2/conf.d/landscape.conf
+exec httpd -DFOREGROUND

@@ -145,6 +145,26 @@ function startService {
   startSyslog
 
   lsctl start
+
+  if [ "$SERVICE" == "ASYNC_FRONTEND" ]; then
+    tail -f /var/log/landscape-server/async-frontend.log
+  elif [ "$SERVICE" == "APPSERVER" ]; then
+    tail -f /var/log/landscape-server/appserver.log
+  elif [ "$SERVICE" == "APISERVER" ]; then
+    tail -f /var/log/landscape-server/api.log
+  elif [ "$SERVICE" == "PINGSERVER" ]; then
+    tail -f /var/log/landscape-server/pingserver.log
+  elif [ "$SERVICE" == "JOBHANDLER" ]; then
+    tail -f /var/log/landscape-server/job-handler.log
+  elif [ "$SERVICE" == "MSGSERVER" ]; then
+    tail -f /var/log/landscape-server/message-server.log
+  elif [ "$SERVICE" == "PACKAGEUPLOADSERVER" ]; then
+    tail -f /var/log/landscape-server/package-upload.log
+  elif [ "$SERVICE" == "PACKAGEUPLOADSERVER" ]; then
+    tail -f /var/log/landscape-server/package-upload.log
+  else
+    tail -f /etc/landscape/service.conf
+  fi
 }
 
 # ----------------------------------------------------------
@@ -157,6 +177,4 @@ if [ "$SERVICE" == "UPGRADE" ]; then
   upgradeSchema
 else
   startService
-
-  tail -f /etc/landscape/service.conf
 fi
