@@ -35,6 +35,8 @@ build_master_tag:
   only:
     - master
     - tags
+  except:
+    - branches
 
 # ---------------------------------------------------------------------------
 # On branches except master: verify that build works, do not push to registry
