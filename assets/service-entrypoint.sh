@@ -164,6 +164,7 @@ function startService {
   elif [ "$SERVICE" == "CRON" ]; then
     cron
     # ensure that the log files exist on startup
+    mkdir /var/log/landscape-server
     touch /var/log/landscape-server/update-alerts.log \
       /var/log/landscape-server/process-alerts.log \
       /var/log/landscape-server/landscape-profiles.log \
