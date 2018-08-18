@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# set -e
+set -e
 
 # ----------------------------------------------------------
 # Set default values for missing inputs
@@ -100,6 +100,9 @@ function init {
   if [ !"$(ls -A /var/lib/landscape)" ]; then
     cp -R /data/landscape-server /var/lib
   fi
+
+  # Set postfix hostname
+  sed -i '/hostname = /c\hostname = '$DOMAIN /etc/postfix/main.cf
 }
 
 # ----------------------------------------------------------
