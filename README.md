@@ -11,7 +11,6 @@ You need at least one proxy container and the following service container:
 
 * APPSERVER
 * ASYNC_FRONTEND
-* JOBHANDLER
 * MSGSERVER
 * PINGSERVER
 * APISERVER
