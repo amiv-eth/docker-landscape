@@ -105,7 +105,7 @@ function init {
 # ----------------------------------------------------------
 # Function: starts rsyslog daemon
 # ----------------------------------------------------------
-startSyslog () {
+function startSyslog {
   if ! pgrep rsyslogd 
   then
     printf "Starting rsyslogd\n"
@@ -143,27 +143,39 @@ function upgradeSchema {
 function startService {
   init
   startSyslog
+  /etc/init.d/postfix start
 
   lsctl start
 
   if [ "$SERVICE" == "ASYNC_FRONTEND" ]; then
-    tail -f /var/log/landscape-server/async-frontend.log
+    /opt/canonical/landscape/job-handler &
+    tail -f /var/log/landscape-server/async-frontend.log /var/log/landscape-server/job-handler.log
   elif [ "$SERVICE" == "APPSERVER" ]; then
-    tail -f /var/log/landscape-server/appserver.log
+    /opt/canonical/landscape/package-search &
+    tail -f /var/log/landscape-server/appserver.log /var/log/landscape-server/package-search.log
   elif [ "$SERVICE" == "APISERVER" ]; then
     tail -f /var/log/landscape-server/api.log
   elif [ "$SERVICE" == "PINGSERVER" ]; then
     tail -f /var/log/landscape-server/pingserver.log
-  elif [ "$SERVICE" == "JOBHANDLER" ]; then
-    tail -f /var/log/landscape-server/job-handler.log
   elif [ "$SERVICE" == "MSGSERVER" ]; then
     tail -f /var/log/landscape-server/message-server.log
   elif [ "$SERVICE" == "PACKAGEUPLOADSERVER" ]; then
     tail -f /var/log/landscape-server/package-upload.log
-  elif [ "$SERVICE" == "PACKAGEUPLOADSERVER" ]; then
-    tail -f /var/log/landscape-server/package-upload.log
   elif [ "$SERVICE" == "CRON" ]; then
-    cron -f
+    cron
+    # ensure that the log files exist on startup
+    touch /var/log/landscape-server/update-alerts.log \
+      /var/log/landscape-server/process-alerts.log \
+      /var/log/landscape-server/landscape-profiles.log \
+      /var/log/landscape-server/sync_lds_releases.log \
+      /var/log/landscape-server/maintenance.log \
+      /var/log/landscape-server/update_security_db.log
+    tail -f /var/log/landscape-server/update-alerts.log \
+      /var/log/landscape-server/process-alerts.log \
+      /var/log/landscape-server/landscape-profiles.log \
+      /var/log/landscape-server/sync_lds_releases.log \
+      /var/log/landscape-server/maintenance.log \
+      /var/log/landscape-server/update_security_db.log
   else
     tail -f /etc/landscape/service.conf
   fi

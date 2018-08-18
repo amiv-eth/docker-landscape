@@ -15,6 +15,8 @@ RUN mkdir /data && \
     mv /var/lib/landscape /data && \
     mv /var/lib/landscape-server /data
 
+# Use encryption for sending mails if possible
+RUN echo "smtp_tls_security_level = may" >> /etc/postfix/main.cf
 COPY assets/landscape.conf /etc/landscape/service.conf
 
 COPY assets/service-entrypoint.sh /sbin/entrypoint.sh

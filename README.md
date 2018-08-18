@@ -16,7 +16,6 @@ You need at least one proxy container and the following service container:
 * PINGSERVER
 * APISERVER
 * PACKAGEUPLOADSERVER
-* PACKAGESEARCH
 * CRON
 * *UPGRADE**
 
